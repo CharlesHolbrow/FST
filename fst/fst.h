@@ -267,8 +267,9 @@ typedef enum {
   FST_EFFECT_CATEGORY(OfflineProcess, 9),
   FST_EFFECT_CATEGORY(Shell, 10),
   FST_EFFECT_CATEGORY(Generator, 11),
+  FST_EFFECT_CATEGORY(MaxCount, 12),
 
-  fst_categoryLast /* last enum */
+//  fst_categoryLast /* last enum */
 } t_fstEffectCategories;
 
 typedef enum {
@@ -360,9 +361,9 @@ enum {
 
 
   /* used as t_fstPinProperties.flags */
-  FST_FLAG_UNKNOWN(PinIsActive),
-  FST_FLAG_UNKNOWN(PinUseSpeaker),
-  FST_FLAG_UNKNOWN(PinIsStereo),
+  FST_FLAG(PinIsActive, 0),
+  FST_FLAG(PinIsStereo, 1),
+  FST_FLAG(PinUseSpeaker, 2),
 
   /* used as: t_fstTimeInfo.smpteFrameRate */
   FST_CONSTANT_UNKNOWN(Smpte239fps),
@@ -462,7 +463,7 @@ typedef struct fstSpeakerProperties_ {
 typedef struct fstSpeakerArrangement_ {
   int type;
   int numChannels;
-  t_fstSpeakerProperties speakers[];
+  t_fstSpeakerProperties speakers[8];
 } t_fstSpeakerArrangement;
 
 typedef struct fstTimeInfo_ {
@@ -494,6 +495,7 @@ typedef struct fstPinProperties_ {
   FST_UNKNOWN(int) flags; /* ? kVstPinIsActive | kVstPinUseSpeaker | kVstPinIsStereo */
   FST_UNKNOWN(int) arrangementType; /* ? */
   char shortLabel[8];
+  char _padding2[48];
 } FST_UNKNOWN(t_fstPinProperties);
 
 
@@ -523,11 +525,13 @@ typedef struct _fstEffect {
   t_fstInt32 numInputs;
   t_fstInt32 numOutputs;
 
-  FST_UNKNOWN(t_fstPtrInt) flags; /* ?? */
+  FST_UNKNOWN(t_fstInt32) flags; /* ?? */
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd1); /* ?? */
   FST_UNKNOWN(t_fstPtrInt) FST_UNKNOWN(resvd2); /* ?? */
   FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(initialDelay); /* ??; latency in samples */
-  char _pad2[8];
+
+  FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(unknown1);
+  FST_UNKNOWN(t_fstInt32) FST_UNKNOWN(unknown2);
 
   float float1;
   void* object;
@@ -537,6 +541,7 @@ typedef struct _fstEffect {
 
   AEffectProcessProc processReplacing;
   AEffectProcessDoubleProc processDoubleReplacing;
+  char _padding2[56];
 } FST_UNKNOWN(t_fstEffect);
 
 typedef struct _fstRectangle {
